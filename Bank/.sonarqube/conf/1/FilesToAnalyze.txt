@@ -1,0 +1,11 @@
+﻿C:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain.Tests\BanckAccountTests.cs
+C:\Users\HP\.nuget\packages\microsoft.net.test.sdk\17.13.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.Program.cs
+C:\Users\HP\.nuget\packages\microsoft.testplatform.testhost\17.13.0\build\netcoreapp3.1\x64\testhost.exe
+C:\Users\HP\.nuget\packages\microsoft.testplatform.testhost\17.13.0\build\netcoreapp3.1\x64\testhost.dll
+C:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain.Tests\TestResults\27e4465f-9ac4-44ce-ab66-e22454d3ddc9\coverage.opencover.xml
+C:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain.Tests\TestResults\6d62eee9-bd2a-490c-b95b-58f4a9420d86\coverage.opencover.xml
+C:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain.Tests\TestResults\cebc2ead-65c7-492f-a495-1981564c8951\coverage.cobertura.xml
+C:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain.Tests\TestResults\ddbef137-9baa-46dd-a0b2-bd0b6cf6ece8\coverage.cobertura.xml
+C:\Users\HP\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\HP\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\HP\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\Microsoft.TestPlatform.AdapterUtilities.dll

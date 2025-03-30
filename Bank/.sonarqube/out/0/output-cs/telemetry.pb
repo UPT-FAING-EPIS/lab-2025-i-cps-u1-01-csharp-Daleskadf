@@ -1,0 +1,1 @@
+xRbC:\Users\HP\Desktop\lab1\lab-2025-i-cps-u1-01-csharp-Daleskadf\Bank\Bank.Domain\Bank.Domain.csproj¢net8.0òCSharp12
