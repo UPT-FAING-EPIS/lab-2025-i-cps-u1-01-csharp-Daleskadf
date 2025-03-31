@@ -29,13 +29,14 @@ jobs:
           cd Bank/Bank.Domain  # Entra al directorio del proyecto
           ls -R  # Verifica que los archivos existen
           dotnet build Bank.Domain.csproj --configuration Release
-          dotnet pack Bank.Domain.csproj --configuration Release
+          dotnet pack Bank.Domain.csproj --configuration Release --output ./nupkg
+          ls -R ./nupkg  # Verifica que el paquete .nupkg fue generado
 
       - name: Publish to GitHub Packages
         env:
           GH_NUGET_TOKEN: ${{ secrets.GH_NUGET_TOKEN }}
         run: |
-          dotnet nuget push bin/Release/*.nupkg \
+          dotnet nuget push Bank/Bank.Domain/nupkg/*.nupkg \
             --source "https://nuget.pkg.github.com/Daleskadf/index.json" \
             --api-key "$GH_NUGET_TOKEN" \
             --skip-duplicate
