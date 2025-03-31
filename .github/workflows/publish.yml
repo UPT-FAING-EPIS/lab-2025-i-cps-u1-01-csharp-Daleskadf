@@ -1,0 +1,34 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main  # Cambia si usas otra rama principal
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'  # Asegúrate de que coincida con tu versión
+
+      - name: 🔨 Build and Pack
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet pack --configuration Release
+
+      - name: 🚀 Publish to GitHub Packages
+        run: |
+          dotnet nuget push Bank.Domain/bin/Release/*.nupkg `
+            --source "https://nuget.pkg.github.com/Daleskadf/index.json" `
+            --api-key ${{ secrets.GITHUB_TOKEN }} `
+            --skip-duplicate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
