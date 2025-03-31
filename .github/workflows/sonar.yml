@@ -22,21 +22,19 @@ jobs:
           dotnet-version: '8.0'  
 
       - name: Restore dependencies
-        run: dotnet restore Bank/Bank.Domain/Bank.Domain.csproj
+        run: dotnet restore Bank.sln  # Usa el archivo de solución
 
       - name: Build and Pack
         run: |
-          cd Bank/Bank.Domain  # Entra al directorio del proyecto
-          ls -R  # Verifica que los archivos existen
-          dotnet build Bank.Domain.csproj --configuration Release
-          dotnet pack Bank.Domain.csproj --configuration Release --output ./nupkg
+          dotnet build Bank.sln --configuration Release
+          dotnet pack Bank/Bank.Domain/Bank.Domain.csproj --configuration Release --output ./nupkg
           ls -R ./nupkg  # Verifica que el paquete .nupkg fue generado
 
       - name: Publish to GitHub Packages
         env:
           GH_NUGET_TOKEN: ${{ secrets.GH_NUGET_TOKEN }}
         run: |
-          dotnet nuget push Bank/Bank.Domain/nupkg/*.nupkg \
+          dotnet nuget push ./nupkg/*.nupkg \
             --source "https://nuget.pkg.github.com/Daleskadf/index.json" \
             --api-key "$GH_NUGET_TOKEN" \
             --skip-duplicate
@@ -47,5 +45,5 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"Daleskadf_Bank" /o:"apibank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet build --configuration Release
+          dotnet build Bank.sln --configuration Release  # Aquí especificamos el .sln
           dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
