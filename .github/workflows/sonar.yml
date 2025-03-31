@@ -12,14 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Descarga todo el historial para evitar problemas en SonarQube
 
       - name: Verificar estructura del repositorio
-        run: ls -R  # Lista todos los archivos y carpetas en el repositorio
-
-      - name: Verificar existencia del archivo Bank.Domain.csproj
-        run: ls -l Bank.Domain/  # Lista los archivos dentro de Bank.Domain
+        run: ls -R  # Lista toda la estructura para depuración
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -27,16 +22,17 @@ jobs:
           dotnet-version: '8.0'  
 
       - name: Restore dependencies
-        run: dotnet restore Bank.Domain/Bank.Domain.csproj
+        run: dotnet restore Bank/Bank.Domain/Bank.Domain.csproj
 
       - name: Build and Pack
         run: |
-          dotnet build Bank.Domain/Bank.Domain.csproj --configuration Release
-          dotnet pack Bank.Domain/Bank.Domain.csproj --configuration Release
+          cd Bank/Bank.Domain  # Entra al directorio del proyecto
+          dotnet build Bank.Domain.csproj --configuration Release
+          dotnet pack Bank.Domain.csproj --configuration Release
 
       - name: Publish to GitHub Packages
         run: |
-          dotnet nuget push Bank.Domain/bin/Release/*.nupkg \
+          dotnet nuget push Bank/Bank.Domain/bin/Release/*.nupkg \
             --source "https://nuget.pkg.github.com/Daleskadf/index.json" \
             --api-key ${{ secrets.GITHUB_TOKEN }} \
             --skip-duplicate
@@ -44,10 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: SonarQube Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"Daleskadf_Bank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$SONAR_TOKEN"
+          dotnet sonarscanner begin /k:"Daleskadf_Bank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build --configuration Release
-          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
