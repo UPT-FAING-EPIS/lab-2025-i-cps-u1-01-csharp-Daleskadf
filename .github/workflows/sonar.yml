@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '8.0'  
 
       - name: Restore dependencies
-        run:  dotnet restore Bank.sln  # Usa el archivo de solución
+        run: dotnet restore Bank/Bank.sln  # Usa el archivo de solución con la ruta correcta
 
       - name: Build and Pack
         run: |
@@ -47,5 +47,5 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"Daleskadf_Bank" /o:"apibank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet build --configuration Release
+          dotnet build Bank/Bank.sln --configuration Release  # Asegurar que SonarQube analiza la solución completa
           dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
