@@ -10,21 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛎️ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup .NET
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0'  # Asegúrate de que coincida con tu versión
+          dotnet-version: '8.0'  
 
-      - name: 🔨 Build and Pack
+      - name: Build and Pack
         run: |
-          dotnet restore
-          dotnet build --configuration Release
-          dotnet pack --configuration Release
+          cd Bank.Domain  # Entra al directorio del proyecto
+          dotnet restore Bank.Domain.csproj
+          dotnet build Bank.Domain.csproj --configuration Release
+          dotnet pack Bank.Domain.csproj --configuration Release
 
-      - name: 🚀 Publish to GitHub Packages
+      - name: Publish to GitHub Packages
         run: |
           dotnet nuget push Bank.Domain/bin/Release/*.nupkg `
             --source "https://nuget.pkg.github.com/Daleskadf/index.json" `
