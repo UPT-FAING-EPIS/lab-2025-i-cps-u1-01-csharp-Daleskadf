@@ -1,0 +1,44 @@
+name: SonarQube & Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main  # Cambia si usas otra rama principal
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'  
+
+      - name: Restore dependencies
+        run: dotnet restore Bank.Domain/Bank.Domain.csproj
+
+      - name: Build and Pack
+        run: |
+          cd Bank.Domain  # Entra al directorio del proyecto
+          dotnet build Bank.Domain.csproj --configuration Release
+          dotnet pack Bank.Domain.csproj --configuration Release
+
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget push Bank.Domain/bin/Release/*.nupkg \
+            --source "https://nuget.pkg.github.com/Daleskadf/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SonarQube Scan
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"Daleskadf_Bank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet build --configuration Release
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
