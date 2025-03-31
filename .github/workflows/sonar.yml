@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Descarga todo el historial para evitar problemas en SonarQube
+
+      - name: Verificar estructura del repositorio
+        run: ls -R  # Lista todos los archivos y carpetas en el repositorio
+
+      - name: Verificar existencia del archivo Bank.Domain.csproj
+        run: ls -l Bank.Domain/  # Lista los archivos dentro de Bank.Domain
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -23,9 +31,8 @@ jobs:
 
       - name: Build and Pack
         run: |
-          cd Bank.Domain  # Entra al directorio del proyecto
-          dotnet build Bank.Domain.csproj --configuration Release
-          dotnet pack Bank.Domain.csproj --configuration Release
+          dotnet build Bank.Domain/Bank.Domain.csproj --configuration Release
+          dotnet pack Bank.Domain/Bank.Domain.csproj --configuration Release
 
       - name: Publish to GitHub Packages
         run: |
@@ -37,8 +44,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"Daleskadf_Bank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin /k:"Daleskadf_Bank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$SONAR_TOKEN"
           dotnet build --configuration Release
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
