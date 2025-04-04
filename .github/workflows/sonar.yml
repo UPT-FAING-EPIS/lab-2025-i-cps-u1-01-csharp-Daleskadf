@@ -28,7 +28,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"apibank_daleska" /o:"apibank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin /k:"daleska" /o:"apibank" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet build Bank/Bank.sln --configuration Release  # Verifica que la solución se construya correctamente
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"      
 
       - name: Build and Pack
         run: |
